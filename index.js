@@ -1,33 +1,56 @@
-const sideMenu = document.querySelector('aside');
-const menuBtn = document.getElementById('menu-btn');
-const closeBtn = document.getElementById('close-btn');
+const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 
-const darkMode = document.querySelector('.dark-mode');
-
-menuBtn.addEventListener('click', () => {
-    sideMenu.style.display = 'block';
+sideLinks.forEach(item => {
+    const li = item.parentElement;
+    item.addEventListener('click', () => {
+        sideLinks.forEach(i => {
+            i.parentElement.classList.remove('active');
+        })
+        li.classList.add('active');
+    })
 });
 
-closeBtn.addEventListener('click', () => {
-    sideMenu.style.display = 'none';
+const menuBar = document.querySelector('.content nav .bx.bx-menu');
+const sideBar = document.querySelector('.sidebar');
+
+menuBar.addEventListener('click', () => {
+    sideBar.classList.toggle('close');
 });
 
-darkMode.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode-variables');
-    darkMode.querySelector('span:nth-child(1)').classList.toggle('active');
-    darkMode.querySelector('span:nth-child(2)').classList.toggle('active');
-})
+const searchBtn = document.querySelector('.content nav form .form-input button');
+const searchBtnIcon = document.querySelector('.content nav form .form-input button .bx');
+const searchForm = document.querySelector('.content nav form');
 
+searchBtn.addEventListener('click', function (e) {
+    if (window.innerWidth < 576) {
+        e.preventDefault;
+        searchForm.classList.toggle('show');
+        if (searchForm.classList.contains('show')) {
+            searchBtnIcon.classList.replace('bx-search', 'bx-x');
+        } else {
+            searchBtnIcon.classList.replace('bx-x', 'bx-search');
+        }
+    }
+});
 
-Orders.forEach(order => {
-    const tr = document.createElement('tr');
-    const trContent = `
-        <td>${order.productName}</td>
-        <td>${order.productNumber}</td>
-        <td>${order.paymentStatus}</td>
-        <td class="${order.status === 'Declined' ? 'danger' : order.status === 'Pending' ? 'warning' : 'primary'}">${order.status}</td>
-        <td class="primary">Details</td>
-    `;
-    tr.innerHTML = trContent;
-    document.querySelector('table tbody').appendChild(tr);
+window.addEventListener('resize', () => {
+    if (window.innerWidth < 768) {
+        sideBar.classList.add('close');
+    } else {
+        sideBar.classList.remove('close');
+    }
+    if (window.innerWidth > 576) {
+        searchBtnIcon.classList.replace('bx-x', 'bx-search');
+        searchForm.classList.remove('show');
+    }
+});
+
+const toggler = document.getElementById('theme-toggle');
+
+toggler.addEventListener('change', function () {
+    if (this.checked) {
+        document.body.classList.add('dark');
+    } else {
+        document.body.classList.remove('dark');
+    }
 });
